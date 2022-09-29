@@ -40,14 +40,14 @@ module.exports = templateData => {
   `
 }
 
-{/* <div class = "card">
+/* <div class = "card">
 <h4 class="card-title">Duder <br>
   Manager</h3>
 <p class="card-text">ID:1 <br>
 Email: <a href="#">test@email.com</a> <br>
 office number
 </p>
-</div> */}
+</div> */
 // WHEN I click on an email address in the HTML
 // THEN my default email program opens and populates the TO field of the email with the address
 // WHEN I click on the GitHub username
