@@ -8,33 +8,34 @@
 // THEN I exit the application, and the HTML is generated
 const fs = require('fs');
 const inquirer = require('inquirer');
-// const generateHtml = require('./scr/html-template');
 const Engineer = require('./lib/Engineer');
 const Manager = require('./lib/Manager');
 const Intern = require('./lib/Intern')
+const generatePage = require('./src/html-template')
+let employees = []
 
+const writeFile = fileContent => {
+  return new Promise((resolve, reject) => {
+    fs.writeFile('./dist/index.html', fileContent, err => {
+      // if there's an error, reject the Promise and send the error to the Promise's `.catch()` method
+      if (err) {
+        reject(err);
+        // return out of the function here to make sure the Promise doesn't accidentally execute the resolve() function as well
+        return;
+      }
 
-// const writeFile = fileContent => {
-//   return new Promise((resolve, reject) => {
-//     fs.writeFile('./dist/index.html', fileContent, err => {
-//       // if there's an error, reject the Promise and send the error to the Promise's `.catch()` method
-//       if (err) {
-//         reject(err);
-//         // return out of the function here to make sure the Promise doesn't accidentally execute the resolve() function as well
-//         return;
-//       }
-
-//       // if everything went well, resolve the Promise and send the successful data to the `.then()` method
-//       resolve({
-//         ok: true,
-//         message: 'File created!'
-//       });
-//     });
-//   });
-// };
+      // if everything went well, resolve the Promise and send the successful data to the `.then()` method
+      resolve({
+        ok: true,
+        message: 'File created!'
+      });
+    });
+  });
+};
 // THEN I am prompted to enter the team manager’s name, employee ID, email address, and office number
 
 const createManager = () => {
+  employees = [];
   return inquirer.prompt([
     {
       type: 'input',
@@ -58,8 +59,7 @@ const createManager = () => {
     },
   ])
   .then(data => {
-    return new Manager(data)
-    // Employees.push(Manager(data));
+    return employees.push(new Manager(data))
   })  
 }
 // WHEN I select the engineer option
@@ -88,7 +88,8 @@ const promptEngineer = () => {
     },
   ])
   .then(data => {
-    return new Engineer(data)
+    employees.push(new Engineer(data));
+    return promptNext();
   })
 }
 
@@ -116,10 +117,10 @@ const promptIntern = () => {
     },
   ])
   .then(data => {
-    return new Intern(data)
+    employees.push(new Intern(data));
+    // console.log(employees);
+    return promptNext();
   })
-  
-
 }
 
 const promptNext = () => {
@@ -130,39 +131,23 @@ const promptNext = () => {
       message: 'Would you like to add an engineer, intern, or finish:',
       choices: ['Engineer', 'Intern', 'Finish']
     }])
+    .then(({next}) => {
+      if (next == 'Engineer') {
+        return promptEngineer()  
+      } else if (next == 'Intern') {
+        return promptIntern()
+      } 
+  })
 }
 
 createManager()
   .then(promptNext)
-  // .then(data => {
-  //   console.log(data.choices)
-  // })
-  .then(data => {
-    while (data = { next: [ 'Engineer' ] } || { next: [ 'Intern' ] }) {
-      if (data = { next: [ 'Engineer' ] }) {
-        console.log(data)
-        promptEngineer(data)
-        // .then(promptNext);
-  
-      } else if (data = { next: [ 'Intern' ] }) {
-        console.log(data)
-        promptIntern(data)
-        // .then(promptNext);
-      }
-    }
+  .then(() => {
+    return generatePage(employees);
   })
-  
-        // .then(promptNext())
-  //     }
-  //   }
-  // })
-  // .then(data => {
-  //   // return generateHtml(data);
-  //   console.log(data)
-  // })
-  // .then(pageHtml => {
-  //   return writeFile(pageHtml);
-  // })
-  // .catch(err => {
-  //   console.log(err);
-  // })
+  .then(pageHtml => {
+    return writeFile(pageHtml);
+  })
+  .catch(err => {
+    console.log(err);
+  })

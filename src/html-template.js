@@ -1,24 +1,48 @@
-const generateEmloyee = aboutEmployee => {
-  return `
-  <div class = "card">
-    <h4 class="card-title">Duder <br>
-      Manager</h3>
-    <p class="card-text">ID:1 <br>
-    Email: <a href="#">test@email.com</a> <br>
-    office number
-    </p>
-  </div>
-  </div>
-  `
+
+const special = (github, officeNumber, school) => {
+  if (github) {
+    return `
+    GitHub: <a href="https://github.com/${github}">${github}<a>
+    `
+  } else if (officeNumber) {
+    return `
+    Office number: ${officeNumber}
+    `
+  } else if (school) {
+    return `
+    School: ${school}
+    `
+  } else {
+    return 
+  }
 }
 
-module.exports = templateData => {
+const generateEmployee = employees => {
+    return `
+      ${employees
+        .map(({name, id, email, role, github, officeNumber, school}) => {
+          return `
+            <div class = "card" style="width:200px">
+              <h4 class="card-title ml-3 mt-2"> ${name} <br>
+                ${role}</h3>
+              <p class="card-text ml-3 mb-2 mt-2 ">
+                ${id}<br>
+                Email: <a href="mailto:${email}">${email}</a> <br>
+                ${special(github, officeNumber, school)}
+              </p>
+          </div>
+          `
+        })
+        .join('')
+      }
+    `
+  }
 
-  const {} = templateData;
-
+module.exports = (employees) => {
   return `
   <!DOCTYPE html>
     <html lang="en">
+
     <head>
       <meta charset="UTF-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -32,7 +56,7 @@ module.exports = templateData => {
         <h1>My Team</h1>
       </header>
       <main class="container d-flex flex-row justify-content-center">
-        ${generateEmloyee()}
+        ${generateEmployee(employees)}
       </main>
       
     </body>
@@ -40,14 +64,6 @@ module.exports = templateData => {
   `
 }
 
-/* <div class = "card">
-<h4 class="card-title">Duder <br>
-  Manager</h3>
-<p class="card-text">ID:1 <br>
-Email: <a href="#">test@email.com</a> <br>
-office number
-</p>
-</div> */
 // WHEN I click on an email address in the HTML
 // THEN my default email program opens and populates the TO field of the email with the address
 // WHEN I click on the GitHub username
