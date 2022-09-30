@@ -14,6 +14,9 @@ const Intern = require('./lib/Intern')
 const generatePage = require('./src/html-template')
 let employees = []
 
+// pretty much just copy and pasted this out of the module 8, the portfolio generator.  I
+// placed it in the index because that's what the assignment said to do.  They laid out the
+// file stucture they said they wanted.
 const writeFile = fileContent => {
   return new Promise((resolve, reject) => {
     fs.writeFile('./dist/index.html', fileContent, err => {
@@ -33,7 +36,10 @@ const writeFile = fileContent => {
   });
 };
 // THEN I am prompted to enter the team manager’s name, employee ID, email address, and office number
-
+// These are the prompts that provide the information we used to generate the HTML.  
+// I guess who ever made this assignment though it would be easier to start with 
+// making these prompt rather than having to make front in applications.  I guess they aslo
+// wanted to make us spend time working with the various node tools.
 const createManager = () => {
   employees = [];
   return inquirer.prompt([
@@ -122,7 +128,8 @@ const promptIntern = () => {
     return promptNext();
   })
 }
-
+// all roads lead here.  This will repeat until Finish is selected and it will go on 
+// to run the html template file then the write file at the top.
 const promptNext = () => {
   return inquirer
     .prompt([{
@@ -139,7 +146,9 @@ const promptNext = () => {
       } 
   })
 }
-
+// This starts with manager where it clears all objects from the employees variable,
+// prompt next leads to functions that go back to prompt next until you say you are done.
+// generatePage is the html-template.js file.
 createManager()
   .then(promptNext)
   .then(() => {

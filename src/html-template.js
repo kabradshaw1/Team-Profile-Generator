@@ -17,6 +17,9 @@ const special = (github, officeNumber, school) => {
   }
 }
 
+// This takes the array of objects and runs through them with the map method to generate
+// the dynamic html section.  The part that was only for each role I did in a if statement 
+// in the function i named special.  This is pretty similar to the portfolio generator.
 const generateEmployee = employees => {
     return `
       ${employees
@@ -38,6 +41,8 @@ const generateEmployee = employees => {
     `
   }
 
+  // This lays out the majority of the html content with the the section that is dynamic
+  // added by the function it calls.  Just passing through the array of objects here
 module.exports = (employees) => {
   return `
   <!DOCTYPE html>
