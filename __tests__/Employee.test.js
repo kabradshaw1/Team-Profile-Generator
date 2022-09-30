@@ -2,6 +2,7 @@ const Employee = require('../lib/Employee.js');
 
 test('creates an employee object', () => {
   const employee = new Employee('Kyle');
+  employee.name = 'Kyle'
   employee.id = 1;
   employee.email = 'test@gmail.com';
   employee.role = 'employee'
@@ -13,6 +14,7 @@ test('creates an employee object', () => {
 
 test('get name from employee', () => {
   const employee = new Employee('Kyle');
+  employee.name = 'Kyle';
   expect(employee.getName()).toEqual('Kyle');
 });
 
